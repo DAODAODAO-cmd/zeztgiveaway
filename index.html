@@ -116,6 +116,15 @@ function App() {
     return o;
   }
 
+  function resetAll() {
+    if (!window.confirm('\u30ea\u30bb\u30c3\u30c8\u3057\u307e\u3059\u304b\uff1f\nAll data will be cleared.')) return;
+    try { localStorage.removeItem('zezts_owned'); localStorage.removeItem('zezts_spent'); } catch(e) {}
+    setOwned({});
+    setSpent(0);
+    setResults([]);
+    setScreen('home');
+  }
+
   function drawOnce() {
     const it = pick();
     collect([it]);
@@ -176,7 +185,10 @@ function App() {
           React.createElement('span', {style:{fontWeight:800,color:'#6b4e18',fontSize:14}}, '\ud83d\udcb4 \u5408\u8a08\u91d1\u984d'),
           React.createElement('span', {style:{fontWeight:800,color:'#c0392b',fontSize:16}}, spent.toLocaleString() + ' \u5186')
         ),
-        React.createElement('button', {onClick:()=>setScreen('dex'), style:{marginTop:20,cursor:'pointer',background:'none',border:'none',color:'#6b4e18',fontWeight:800,fontSize:15,textDecoration:'underline'}}, '\u30b3\u30ec\u30af\u30b7\u30e7\u30f3\u3092\u898b\u308b \u25b8'),
+        React.createElement('div', {style:{display:'flex',gap:16,alignItems:'center',marginTop:20}},
+          React.createElement('button', {onClick:()=>setScreen('dex'), style:{cursor:'pointer',background:'none',border:'none',color:'#6b4e18',fontWeight:800,fontSize:15,textDecoration:'underline'}}, '\u30b3\u30ec\u30af\u30b7\u30e7\u30f3\u3092\u898b\u308b \u25b8'),
+          React.createElement('button', {onClick:resetAll, style:{cursor:'pointer',background:'none',border:'none',color:'#999',fontWeight:700,fontSize:12,textDecoration:'underline'}}, '\u30ea\u30bb\u30c3\u30c8')
+        ),
         React.createElement('div', {style:{height:130,flex:'none'}})
       ),
       // buy bar
