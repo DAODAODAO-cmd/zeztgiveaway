@@ -103,12 +103,16 @@ function App() {
   const [results, setResults] = useState([]);
   const [revealIndex, setRevealIndex] = useState(0);
   const [owned, setOwned] = useState(loadOwned);
+  const [spent, setSpent] = useState(() => { try { return parseInt(localStorage.getItem('zezts_spent')||'0'); } catch(e) { return 0; } });
 
   function collect(items) {
     const o = {...owned};
     items.forEach(it => { o[it.id] = (o[it.id]||0)+1; });
     saveOwned(o);
     setOwned(o);
+    const newSpent = spent + items.length * 990;
+    try { localStorage.setItem('zezts_spent', newSpent); } catch(e) {}
+    setSpent(newSpent);
     return o;
   }
 
@@ -167,6 +171,10 @@ function App() {
           React.createElement('div', {style:{marginTop:7,height:9,borderRadius:6,background:'#e6d3a6',overflow:'hidden'}},
             React.createElement('div', {style:{height:'100%',width:progressPct,background:'linear-gradient(90deg,#5fd0ff,#2a8fe0)',borderRadius:6,transition:'width .5s'}})
           )
+        ),
+        React.createElement('div', {style:{width:'100%',marginTop:10,background:'rgba(255,252,244,.72)',border:'2px solid #c8a24e',borderRadius:14,padding:'10px 16px',boxShadow:'inset 0 1px 0 rgba(255,255,255,.7),0 3px 8px rgba(0,0,0,.12)',display:'flex',justifyContent:'space-between',alignItems:'center'}},
+          React.createElement('span', {style:{fontWeight:800,color:'#6b4e18',fontSize:14}}, '\ud83d\udcb4 \u5408\u8a08\u91d1\u984d'),
+          React.createElement('span', {style:{fontWeight:800,color:'#c0392b',fontSize:16}}, spent.toLocaleString() + ' \u5186')
         ),
         React.createElement('button', {onClick:()=>setScreen('dex'), style:{marginTop:20,cursor:'pointer',background:'none',border:'none',color:'#6b4e18',fontWeight:800,fontSize:15,textDecoration:'underline'}}, '\u30b3\u30ec\u30af\u30b7\u30e7\u30f3\u3092\u898b\u308b \u25b8'),
         React.createElement('div', {style:{height:130,flex:'none'}})
